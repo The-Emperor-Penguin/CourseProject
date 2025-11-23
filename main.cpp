@@ -1,13 +1,29 @@
 #include "data.hpp"
 
-vector<int> smallestPath(int citA, int citB) {
+bool isInVector(vector<int> list, int node) {
+    for (int number : list) {
+        if (number == node) return true;
+    }
+    return false;
+}
+
+vector<int> smallestPath(int citA, int citB, const vector<vector<int>> graph) {
     queue<int> tovisit;
     vector<tuple<int, int>> paths;
     vector<int> shortPath;
     vector<int> visited;
     tovisit.push(citA);
+    // This currently will go through everything and add the shortest path to everynode to paths
+    // TODO: Stop and find the required path from paths
     while(!tovisit.empty()) {
-
+        int currentNode = tovisit.front();
+        tovisit.pop();
+        for (int i = 0; i < graph[currentNode].size(); i++) {
+            int newNode = graph[currentNode][i];
+            if(isInVector(visited, newNode)) continue;
+            tovisit.push(newNode);
+            paths.emplace_back(make_tuple(currentNode, newNode));
+        }
     }
 }
 
