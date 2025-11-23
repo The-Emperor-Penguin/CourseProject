@@ -1,9 +1,18 @@
 #include "data.hpp"
 
+vector<int> smallestPath(int citA, int citB) {
+    queue<int> tovisit;
+    vector<tuple<int, int>> paths;
+    vector<int> shortPath;
+    vector<int> visited;
+    tovisit.push(citA);
+    while(!tovisit.empty()) {
 
+    }
+}
 
 void smallestConnection(string cityA, string cityB, int maxCon) {
-    //Posibly need to check if it exist first before since it would create a new index in the table!!
+    
     if ((!airportInMap(cityA)) && (!airportInMap(cityB))) {
         cout << "Airports Do not exist in given data!";
         return;
