@@ -1,5 +1,7 @@
 #include "data.hpp"
 
+//TODO: Move some functions from this file into another to help clean up the finished code!
+
 bool isInVector(vector<int> list, int node) {
     for (int number : list) {
         if (number == node) return true;
@@ -82,7 +84,7 @@ void smallestConnection(string cityA, string cityB, int maxCon, const vector<vec
     cout << "Number of connections: " << path.size()-2 << endl;
 }
 
-void fastestThroughFourCit(vector<int> intcities, const vector<vector<int>> graph) {
+void passThroughFourCities(vector<int> intcities, const vector<vector<int>> graph) {
     // intcities must have A at 0 B at 1, C at 2, and D at 3
             vector<int> pathAB = smallestPath(intcities.at(0), intcities.at(1), graph);
             vector<int> pathAC = smallestPath(intcities.at(0), intcities.at(2), graph);
@@ -137,6 +139,13 @@ void fastestThroughFourCit(vector<int> intcities, const vector<vector<int>> grap
 
 }
 
+void findMeetUpCity(string cityA, string cityB, string cityC, const vector<vector<int>> graph) {
+/*TODO: Use BFS going from each city until there is a point in common from all of the cities. That 
+point in common is the point in which is closest to all of the cities that minimizes distance for all.\
+implement this search in another function and return the path for each in a R3 tuple.
+*/
+}
+
 int main() {
     vector<vector<int>> graph = create_graph();
     int option;
@@ -166,6 +175,8 @@ int main() {
             cin.clear();
             vector<string> cities;
             char CityAlph = 'A';
+            //Gather input from the user and put it into a vector
+            
             for (int i = 0; i < 4; i++) {
                 string input;
                 cout << "Enter city " << CityAlph << ": ";
@@ -173,21 +184,31 @@ int main() {
                 getline(cin,input);
                 cities.emplace_back(input);
             }
+            //convert the names into ints and put them in a new vector in same order
             vector<int> intcities;
             for (string name : cities) {
                 intcities.emplace_back(airportToInt(name));
             }
-
-            for (int num: intcities) {
-                cout << intToAirport(num) << " ";
-            }
-
-            fastestThroughFourCit(intcities, graph);
+            //Find and print the shortest path going through all the cities and starting and ending at the specified cities
+            passThroughFourCities(intcities, graph);
 
             break;
         }
-        case 3:
+        case 3: {
+            string cityA;
+            string cityB;
+            string cityC;
+            cin.ignore();
+            cin.clear();
+            cout << "Enter city A: ";
+            getline(cin, cityA);
+            cout << "Enter city B: ";
+            getline(cin, cityB);
+            cout << "Enter city C: ";
+            getline(cin, cityC);
+            findMeetUpCity(cityA, cityB, cityC, graph);
             break;
+        }
         default:
             cout << "Warning input not recongnized." << endl;
 
