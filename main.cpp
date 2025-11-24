@@ -91,12 +91,12 @@ void fastestThroughFourCit(vector<int> intcities, const vector<vector<int>> grap
             vector<int> pathCD = smallestPath(intcities.at(2), intcities.at(3), graph);
             vector<int> pathBD = smallestPath(intcities.at(1), intcities.at(3), graph);
 
-            int pathsizeABCD = pathAB.size() + pathBC.size() + pathCD.size();
+            int pathsizeABCD = pathAB.size() + pathBC.size() + pathCD.size() - 2;
             if (pathAB.empty() || pathBC.empty() || pathCD.empty()) {
                 pathsizeABCD = -1;
             }
 
-            int pathsizeACBD = pathAC.size() + pathCB.size() + pathBD.size();
+            int pathsizeACBD = pathAC.size() + pathCB.size() + pathBD.size() - 2;
             if (pathAC.empty() || pathCB.empty() || pathBD.empty()) {
                 pathsizeACBD = -1;
             }
@@ -104,7 +104,7 @@ void fastestThroughFourCit(vector<int> intcities, const vector<vector<int>> grap
             cout << pathsizeABCD << " " << pathsizeACBD << endl;
 
             if ((pathsizeABCD == -1 && pathsizeACBD == -1)) {
-                cout << "There are no paths that go through A,B,C, and D!";
+                cout << "There are no paths that go through A,B,C, and D!" << endl;
             }
             else if ((pathsizeABCD <= pathsizeACBD && pathsizeABCD > -1) || (pathsizeACBD == -1 && pathsizeABCD > -1)) {
                 cout << "The fastest path is from: ";
