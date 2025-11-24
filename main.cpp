@@ -13,6 +13,7 @@ int findParentofPath(int node, vector<tuple<int,int>> paths) {
             return posparent;
         }
     }
+    return -1;
 }
 
 vector<int> smallestPath(int citA, int citB, const vector<vector<int>> graph) {
@@ -43,6 +44,7 @@ vector<int> smallestPath(int citA, int citB, const vector<vector<int>> graph) {
     //Start going through the path the algorithim took and find the path from B to A.
     shortPath.emplace(shortPath.begin(), citB);
     int parent = findParentofPath(citB, paths);
+    if (parent == -1) return vector<int>();
 
     while (parent != citA) {
         shortPath.emplace(shortPath.begin(), parent);
@@ -89,20 +91,27 @@ int main() {
     cout << "3) City A, City B, and City C meet with smallest connections for all three.";
     cin >> option;
     switch (option) {
-        case 1:
+        case 1: {
+            // TODO: Add git line to deal with spaces
+            cout << "Name of city A: ";
+            string cityA;
+            cin >> cityA;
+            cout << "Name of city B: ";
+            string cityB;
+            cin >> cityB;
+            int numCon;
+            cout << "Number of Connections: ";
+            cin >> numCon;
+            smallestConnection(cityA, cityB, numCon, graph);
+            break;
+        }
         case 2:
+            break;
         case 3:
+            break;
         default:
-        cout << "Name of city A: ";
-        string cityA;
-        cin >> cityA;
-        cout << "Name of city B: ";
-        string cityB;
-        cin >> cityB;
-        int numCon;
-        cout << "Number of Connections: ";
-        cin >> numCon;
-        smallestConnection(cityA, cityB, numCon, graph);
+            cout << "Warning input not recongnized." << endl;
+
     }
 
 }

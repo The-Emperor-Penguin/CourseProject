@@ -1,5 +1,7 @@
 #include "data.hpp"
 
+unordered_map<string, int> airport_to_int;
+
 vector<vector<int>> create_graph(string filename) {
     //Return adjacency list from the given file
     vector<vector<int>> graph;
