@@ -140,10 +140,45 @@ void passThroughFourCities(vector<int> intcities, const vector<vector<int>> grap
 }
 
 void findMeetUpCity(string cityA, string cityB, string cityC, const vector<vector<int>> graph) {
-/*TODO: Use BFS going from each city until there is a point in common from all of the cities. That 
-point in common is the point in which is closest to all of the cities that minimizes distance for all.\
-implement this search in another function and return the path for each in a R3 tuple.
-*/
+    /*TODO: Use BFS going from each city until there is a point in common from all of the cities. That 
+    point in common is the point in which is closest to all of the cities that minimizes distance for all.\
+    implement this search in another function and return the path for each in a R3 tuple.
+    */
+
+    int icityA = airportToInt(cityA);
+    int icityB = airportToInt(cityB);
+    int icityC = airportToInt(cityC);
+
+    //Create all required data structures to run a BFS
+
+    queue<int> Atovisit;
+    Atovisit.push(icityA);
+    vector<tuple<int, int>> APaths;
+    vector<int> Ashortest;
+    queue<int> Btovisit;
+    Btovisit.push(icityB);
+    vector<tuple<int, int>> BPaths;
+    vector<int> BShortest;
+    queue<int> Ctovisit;
+    Ctovisit.push(icityC);
+    vector<tuple<int, int>> CPaths;
+    vector<int> CShortest;
+
+    bool foundMatch = false;
+
+    while ((!Atovisit.empty()) && (!Btovisit.empty()) && (!Ctovisit.empty())) {
+        int Anode = Atovisit.front();
+        Atovisit.pop();
+        int Bnode = Btovisit.front();
+        Btovisit.pop();
+        int Cnode = Ctovisit.front();
+        Ctovisit.pop();
+        
+    }
+
+
+
+
 }
 
 int main() {
