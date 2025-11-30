@@ -139,46 +139,123 @@ void passThroughFourCities(vector<int> intcities, const vector<vector<int>> grap
 
 }
 
+vector<tuple<int,int>> findPaths(int startNode, const vector<vector<int>> graph) {
+    //POSSIBLY DELETE BUT KEEP FOR NOW IN CASE I NEED IT
+    queue<int> toVisit;
+    toVisit.push(startNode);
+    vector<tuple<int,int>> Paths;
+    vector<int> visited;
+    while (!toVisit.empty()) {
+        int node = toVisit.front();
+        toVisit.pop();
+        for (int i = 0; i < graph[node].size(); i++) {
+            int newNode = graph[node][i];
+            if (isInVector(visited, newNode)) continue;
+            toVisit.push(newNode);
+            Paths.emplace_back(make_tuple(node, newNode));
+        }
+    }
+    return Paths;
+}
+
+bool isInQueue(queue<int> list, int node) {
+    queue<int> tempQueue(list);
+    while (!tempQueue.empty()) {
+        int tempNode = tempQueue.front();
+        tempQueue.pop();
+        if (tempNode == node) return true;
+    }
+    return false;
+}
+
+
+int findClosestInteresect(int A, int B, int C, const vector<vector<int>> graph) {
+    int startingNodes[] = {A, B, C};
+    queue<int> Avisited;
+    queue<int> Bvisited;
+    queue<int> Cvisited;
+    for (int i = 0; i < 3; i++) {
+        int startNode = startingNodes[i];
+        queue<int> toVisit;
+        toVisit.push(startNode);
+        queue<int> visited;
+        while (!toVisit.empty()) {
+            int node = toVisit.front();
+            toVisit.pop();
+            visited.push(node);
+            for (int n = 0; n < graph[node].size(); n++) {
+                int newNode = graph[node][n];
+                if (isInQueue(visited, newNode)) continue;
+                toVisit.push(newNode);
+            }
+        }
+        if (i == 0) Avisited = visited;
+        else if (i == 1) Bvisited = visited;
+        else Cvisited = visited;
+    }
+    unordered_map<int, int> nodeCount;
+    while((!Cvisited.empty()) && (!Bvisited.empty()) && (!Avisited.empty())) {
+        int Anode = Avisited.front();
+        Avisited.pop();
+        if (nodeCount.find(Anode) == nodeCount.end()) nodeCount[Anode] = 1;
+        else nodeCount[Anode]++;
+
+        int Bnode = Bvisited.front();
+        Bvisited.pop();
+        if (nodeCount.find(Bnode) == nodeCount.end()) nodeCount[Bnode] = 1;
+        else nodeCount[Bnode]++;
+
+        int Cnode = Cvisited.front();
+        Cvisited.pop();
+        if (nodeCount.find(Cnode) == nodeCount.end()) nodeCount[Cnode] = 1;
+        else nodeCount[Cnode]++;
+
+        for (const auto& [node, count] : nodeCount) {
+            if (count >= 3) return node;
+        }
+
+    }
+    return -1;
+}
+
+
 void findMeetUpCity(string cityA, string cityB, string cityC, const vector<vector<int>> graph) {
     /*TODO: Use BFS going from each city until there is a point in common from all of the cities. That 
     point in common is the point in which is closest to all of the cities that minimizes distance for all.\
-    implement this search in another function and return the path for each in a R3 tuple.
+    After finding the common point it will find the smallest path for each city and return it to display.
     */
 
     int icityA = airportToInt(cityA);
     int icityB = airportToInt(cityB);
     int icityC = airportToInt(cityC);
 
-    //Create all required data structures to run a BFS
+    int meetupcity = findClosestInteresect(icityA, icityB, icityC, graph);
 
-    queue<int> Atovisit;
-    Atovisit.push(icityA);
-    vector<tuple<int, int>> APaths;
-    vector<int> Ashortest;
-    queue<int> Btovisit;
-    Btovisit.push(icityB);
-    vector<tuple<int, int>> BPaths;
-    vector<int> BShortest;
-    queue<int> Ctovisit;
-    Ctovisit.push(icityC);
-    vector<tuple<int, int>> CPaths;
-    vector<int> CShortest;
+    vector<int> Ashortest = smallestPath(icityA, meetupcity, graph);
+    vector<int> BShortest = smallestPath(icityB, meetupcity, graph);
+    vector<int> CShortest = smallestPath(icityC, meetupcity, graph);
 
-    bool foundMatch = false;
-
-    while ((!Atovisit.empty()) && (!Btovisit.empty()) && (!Ctovisit.empty())) {
-        int Anode = Atovisit.front();
-        Atovisit.pop();
-        int Bnode = Btovisit.front();
-        Btovisit.pop();
-        int Cnode = Ctovisit.front();
-        Ctovisit.pop();
-        
+    string meetupname =  intToAirport(meetupcity);
+    cout << "You should meet at: " << meetupname << endl;
+    cout << "Route for first person: ";
+    string airport;
+    for (int i = 0; i < Ashortest.size(); i++) {
+        airport = intToAirport(Ashortest.at(i));
+        if (i != Ashortest.size()-1) cout << airport << "->";
+        else cout << airport << endl;
     }
-
-
-
-
+    cout << "Route for second person: ";
+    for (int i = 0; i < BShortest.size(); i++) {
+        airport = intToAirport(BShortest.at(i));
+        if (i != BShortest.size()-1) cout << airport << "->";
+        else cout << airport << endl;
+    }
+    cout << "Route for last person: ";
+    for (int i = 0; i < CShortest.size(); i++) {
+        airport = intToAirport(CShortest.at(i));
+        if (i != CShortest.size()-1) cout << airport << "->";
+        else cout << airport << endl;
+    }
 }
 
 int main() {
