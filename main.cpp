@@ -171,21 +171,21 @@ bool isInQueue(queue<int> list, int node) {
 
 int findClosestInteresect(int A, int B, int C, const vector<vector<int>> graph) {
     int startingNodes[] = {A, B, C};
-    queue<int> Avisited;
-    queue<int> Bvisited;
-    queue<int> Cvisited;
+    vector<int> Avisited;
+    vector<int> Bvisited;
+    vector<int> Cvisited;
     for (int i = 0; i < 3; i++) {
         int startNode = startingNodes[i];
         queue<int> toVisit;
         toVisit.push(startNode);
-        queue<int> visited;
+        vector<int> visited;
         while (!toVisit.empty()) {
             int node = toVisit.front();
             toVisit.pop();
-            visited.push(node);
+            visited.emplace_back(node);
             for (int n = 0; n < graph[node].size(); n++) {
                 int newNode = graph[node][n];
-                if (isInQueue(visited, newNode)) continue;
+                if (isInVector(visited, newNode)) continue;
                 toVisit.push(newNode);
             }
         }
@@ -193,27 +193,10 @@ int findClosestInteresect(int A, int B, int C, const vector<vector<int>> graph) 
         else if (i == 1) Bvisited = visited;
         else Cvisited = visited;
     }
-    unordered_map<int, int> nodeCount;
-    while((!Cvisited.empty()) && (!Bvisited.empty()) && (!Avisited.empty())) {
-        int Anode = Avisited.front();
-        Avisited.pop();
-        if (nodeCount.find(Anode) == nodeCount.end()) nodeCount[Anode] = 1;
-        else nodeCount[Anode]++;
-
-        int Bnode = Bvisited.front();
-        Bvisited.pop();
-        if (nodeCount.find(Bnode) == nodeCount.end()) nodeCount[Bnode] = 1;
-        else nodeCount[Bnode]++;
-
-        int Cnode = Cvisited.front();
-        Cvisited.pop();
-        if (nodeCount.find(Cnode) == nodeCount.end()) nodeCount[Cnode] = 1;
-        else nodeCount[Cnode]++;
-
-        for (const auto& [node, count] : nodeCount) {
-            if (count >= 3) return node;
+    for (int node : Avisited) {
+        if (isInVector(Bvisited, node) && isInVector(Cvisited, node)) {
+            return node;
         }
-
     }
     return -1;
 }
