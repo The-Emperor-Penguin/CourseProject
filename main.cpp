@@ -139,25 +139,6 @@ void passThroughFourCities(vector<int> intcities, const vector<vector<int>> grap
 
 }
 
-vector<tuple<int,int>> findPaths(int startNode, const vector<vector<int>> graph) {
-    //POSSIBLY DELETE BUT KEEP FOR NOW IN CASE I NEED IT
-    queue<int> toVisit;
-    toVisit.push(startNode);
-    vector<tuple<int,int>> Paths;
-    vector<int> visited;
-    while (!toVisit.empty()) {
-        int node = toVisit.front();
-        toVisit.pop();
-        for (int i = 0; i < graph[node].size(); i++) {
-            int newNode = graph[node][i];
-            if (isInVector(visited, newNode)) continue;
-            toVisit.push(newNode);
-            Paths.emplace_back(make_tuple(node, newNode));
-        }
-    }
-    return Paths;
-}
-
 bool isInQueue(queue<int> list, int node) {
     queue<int> tempQueue(list);
     while (!tempQueue.empty()) {
