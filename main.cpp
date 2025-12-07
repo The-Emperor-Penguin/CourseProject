@@ -1,8 +1,7 @@
 #include "data.hpp"
 
-//TODO: Move some functions from this file into another to help clean up the finished code!
-
 bool isInVector(vector<int> list, int node) {
+    //find if a int is in a vector
     for (int number : list) {
         if (number == node) return true;
     }
@@ -10,6 +9,7 @@ bool isInVector(vector<int> list, int node) {
 }
 
 int findParentofPath(int node, vector<tuple<int,int>> paths) {
+    //Find the pararnt of the node in the path
     for (auto [posparent, posnode]: paths) {
         if (posnode == node) {
             return posparent;
@@ -86,94 +86,101 @@ void smallestConnection(string cityA, string cityB, int maxCon, const vector<vec
 
 void passThroughFourCities(vector<int> intcities, const vector<vector<int>> graph) {
     // intcities must have A at 0 B at 1, C at 2, and D at 3
-            vector<int> pathAB = smallestPath(intcities.at(0), intcities.at(1), graph);
-            vector<int> pathAC = smallestPath(intcities.at(0), intcities.at(2), graph);
-            vector<int> pathBC = smallestPath(intcities.at(1), intcities.at(2), graph);
-            vector<int> pathCB = smallestPath(intcities.at(2), intcities.at(1), graph);
-            vector<int> pathCD = smallestPath(intcities.at(2), intcities.at(3), graph);
-            vector<int> pathBD = smallestPath(intcities.at(1), intcities.at(3), graph);
 
-            int pathsizeABCD = pathAB.size() + pathBC.size() + pathCD.size() - 2;
-            if (pathAB.empty() || pathBC.empty() || pathCD.empty()) {
-                pathsizeABCD = -1;
-            }
+    //This finds the shortest path that goes from ABCD and ACBD since it could be in either order
+    //And one could be shorter than the other.
+    vector<int> pathAB = smallestPath(intcities.at(0), intcities.at(1), graph);
+    vector<int> pathAC = smallestPath(intcities.at(0), intcities.at(2), graph);
+    vector<int> pathBC = smallestPath(intcities.at(1), intcities.at(2), graph);
+    vector<int> pathCB = smallestPath(intcities.at(2), intcities.at(1), graph);
+    vector<int> pathCD = smallestPath(intcities.at(2), intcities.at(3), graph);
+    vector<int> pathBD = smallestPath(intcities.at(1), intcities.at(3), graph);
 
-            int pathsizeACBD = pathAC.size() + pathCB.size() + pathBD.size() - 2;
-            if (pathAC.empty() || pathCB.empty() || pathBD.empty()) {
-                pathsizeACBD = -1;
-            }
 
-            cout << pathsizeABCD << " " << pathsizeACBD << endl;
-
-            if ((pathsizeABCD == -1 && pathsizeACBD == -1)) {
-                cout << "There are no paths that go through A,B,C, and D!" << endl;
-            }
-            else if ((pathsizeABCD <= pathsizeACBD && pathsizeABCD > -1) || (pathsizeACBD == -1 && pathsizeABCD > -1)) {
-                cout << "The fastest path is from: ";
-                for (int i = 0; i < pathAB.size()-1; i++) {
-                    cout << intToAirport(pathAB[i]) << " -> ";
-                }
-                for (int i = 0; i < pathBC.size()-1; i++) {
-                    cout << intToAirport(pathBC[i]) << " -> ";
-                }
-                for (int i = 0; i < pathCD.size(); i++) {
-                    if (i == pathCD.size()-1) cout << intToAirport(pathCD[i]);
-                    else cout << intToAirport(pathCD[i]) << " -> ";
-                }
-                cout << endl;
-            }
-            else if ((pathsizeACBD <= pathsizeABCD && pathsizeACBD > -1) || (pathsizeABCD == -1 && pathsizeACBD > -1)) {
-                cout << "The fastest path is from: ";
-                for (int i = 0; i < pathAC.size()-1; i++) {
-                    cout << intToAirport(pathAC[i]) << " -> ";
-                }
-                for (int i = 0; i < pathCB.size()-1; i++) {
-                    cout << intToAirport(pathCB[i]) << " -> ";
-                }
-                for (int i = 0; i < pathBD.size(); i++) {
-                    if (i == pathBD.size()-1) cout << intToAirport(pathBD[i]);
-                    else cout << intToAirport(pathBD[i]) << " -> ";
-                }
-                cout << endl;
-            }
-
-}
-
-bool isInQueue(queue<int> list, int node) {
-    queue<int> tempQueue(list);
-    while (!tempQueue.empty()) {
-        int tempNode = tempQueue.front();
-        tempQueue.pop();
-        if (tempNode == node) return true;
+    //If a path doesn't exist then set the total size to -1
+    int pathsizeABCD = pathAB.size() + pathBC.size() + pathCD.size() - 2;
+    if (pathAB.empty() || pathBC.empty() || pathCD.empty()) {
+        pathsizeABCD = -1;
     }
-    return false;
+
+    int pathsizeACBD = pathAC.size() + pathCB.size() + pathBD.size() - 2;
+    if (pathAC.empty() || pathCB.empty() || pathBD.empty()) {
+        pathsizeACBD = -1;
+    }
+
+    cout << pathsizeABCD << " " << pathsizeACBD << endl;
+
+
+    //Find the shortest path that exists and display it
+    if ((pathsizeABCD == -1 && pathsizeACBD == -1)) {
+        cout << "There are no paths that go through A,B,C, and D!" << endl;
+    }
+    else if ((pathsizeABCD <= pathsizeACBD && pathsizeABCD > -1) || (pathsizeACBD == -1 && pathsizeABCD > -1)) {
+        cout << "The fastest path is from: ";
+        for (int i = 0; i < pathAB.size()-1; i++) {
+            cout << intToAirport(pathAB[i]) << " -> ";
+        }
+        for (int i = 0; i < pathBC.size()-1; i++) {
+            cout << intToAirport(pathBC[i]) << " -> ";
+        }
+        for (int i = 0; i < pathCD.size(); i++) {
+            if (i == pathCD.size()-1) cout << intToAirport(pathCD[i]);
+            else cout << intToAirport(pathCD[i]) << " -> ";
+        }
+        cout << endl;
+    }
+    else if ((pathsizeACBD <= pathsizeABCD && pathsizeACBD > -1) || (pathsizeABCD == -1 && pathsizeACBD > -1)) {
+        cout << "The fastest path is from: ";
+        for (int i = 0; i < pathAC.size()-1; i++) {
+            cout << intToAirport(pathAC[i]) << " -> ";
+        }
+        for (int i = 0; i < pathCB.size()-1; i++) {
+            cout << intToAirport(pathCB[i]) << " -> ";
+        }
+        for (int i = 0; i < pathBD.size(); i++) {
+            if (i == pathBD.size()-1) cout << intToAirport(pathBD[i]);
+            else cout << intToAirport(pathBD[i]) << " -> ";
+        }
+        cout << endl;
+    }
+
 }
 
 
 int findClosestInteresect(int A, int B, int C, const vector<vector<int>> graph) {
+    //create a array of the starting nodes for the for loop
     int startingNodes[] = {A, B, C};
+    //Create a vectir to keep track where they visited
     vector<int> Avisited;
     vector<int> Bvisited;
     vector<int> Cvisited;
+    //For each of the starting nodes use BFS to find all nodes in the graph that can be reached by the starting node
     for (int i = 0; i < 3; i++) {
+        //Set up the varaibles for a BFS
         int startNode = startingNodes[i];
         queue<int> toVisit;
         toVisit.push(startNode);
         vector<int> visited;
+
         while (!toVisit.empty()) {
             int node = toVisit.front();
             toVisit.pop();
             visited.emplace_back(node);
+
             for (int n = 0; n < graph[node].size(); n++) {
+                //See if the new child node is already visited
                 int newNode = graph[node][n];
                 if (isInVector(visited, newNode)) continue;
                 toVisit.push(newNode);
             }
         }
+        //Add the visited vector to the respective starting node
         if (i == 0) Avisited = visited;
         else if (i == 1) Bvisited = visited;
         else Cvisited = visited;
     }
+    //Return which node is the first that is in all three vectors
+    //This should be the closest city to all of the nodes
     for (int node : Avisited) {
         if (isInVector(Bvisited, node) && isInVector(Cvisited, node)) {
             return node;
@@ -184,21 +191,23 @@ int findClosestInteresect(int A, int B, int C, const vector<vector<int>> graph) 
 
 
 void findMeetUpCity(string cityA, string cityB, string cityC, const vector<vector<int>> graph) {
-    /*TODO: Use BFS going from each city until there is a point in common from all of the cities. That 
-    point in common is the point in which is closest to all of the cities that minimizes distance for all.\
-    After finding the common point it will find the smallest path for each city and return it to display.
-    */
-
+    //Convert the names to ints
     int icityA = airportToInt(cityA);
     int icityB = airportToInt(cityB);
     int icityC = airportToInt(cityC);
 
+    //Find the meetup city
+
     int meetupcity = findClosestInteresect(icityA, icityB, icityC, graph);
 
+
+    //find the paths to the meetup city from all three cities
     vector<int> Ashortest = smallestPath(icityA, meetupcity, graph);
     vector<int> BShortest = smallestPath(icityB, meetupcity, graph);
     vector<int> CShortest = smallestPath(icityC, meetupcity, graph);
 
+
+    //Display the paths for each city
     string meetupname =  intToAirport(meetupcity);
     cout << "You should meet at: " << meetupname << endl;
     cout << "Route for first person: ";

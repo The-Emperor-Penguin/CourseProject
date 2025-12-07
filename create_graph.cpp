@@ -76,7 +76,7 @@ void printAdjList(vector<vector<int>> graph) {
 }
 
 int test_main() {
-    // Used to debug file
+    // Used to debug this file
     auto graph = create_graph();
     printAdjList(graph);
     return 0;
